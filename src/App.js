@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './App.css';
 /* 
 Deliverables
@@ -13,6 +13,13 @@ function App() {
   const [likes, setLikes] = useState(0)
   const [image, setImage] = useState("https://randomfox.ca/images/41.jpg")
   console.log(image)
+
+  useEffect(() => {
+    fetch("https://randomfox.ca/floof/")
+    .then((response) => response.json())
+    .then((data) => setImage(data.image))
+  }, [])
+
   function handleNewFoxClick() {
     fetch("https://randomfox.ca/floof/")
       .then((response) => response.json())
@@ -24,7 +31,11 @@ function App() {
   function handleLikes(){
       setLikes(prevLikes => prevLikes+1)
   }
-  
+
+  if (!image) {
+    return <h2>Loading...</h2>
+  }
+
   return (
     <div id='foxRoot'>
       <h1>🦊 FoxFindr 🦊</h1>
